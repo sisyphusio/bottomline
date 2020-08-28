@@ -13,7 +13,7 @@
     "require": {
         "php": ">=5.5.0",
         "ext-mbstring": "*",
-        "doctrine/inflector": "^2.0"
+        "doctrine/inflector": "^1.0"
     },
     "require-dev": {
         "doctrine/instantiator": "~1.0.5",
