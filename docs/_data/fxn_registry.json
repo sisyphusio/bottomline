@@ -1951,6 +1951,30 @@
             }
         },
         {
+            "name": "singular",
+            "namespace": "strings",
+            "summary": "<p>Get the singular form of an English word.</p>",
+            "summaryRaw": "Get the singular form of an English word.",
+            "description": "",
+            "descriptionRaw": "",
+            "arguments": [
+                {
+                    "name": "value",
+                    "isVariadic": false,
+                    "description": "",
+                    "defaultValue": null,
+                    "defaultValueAsString": null,
+                    "type": "string"
+                }
+            ],
+            "changelog": [],
+            "exceptions": [],
+            "return": {
+                "type": "string",
+                "description": ""
+            }
+        },
+        {
             "name": "snakeCase",
             "namespace": "strings",
             "summary": "<p>Converts string to <a href=\"https://en.wikipedia.org/wiki/Snake_case\">snake case</a>.</p>",
