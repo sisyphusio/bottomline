@@ -37,6 +37,62 @@ class StringsTest extends TestCase
         $this->assertEquals('Fred', $x);
     }
 
+    public static function provideFind()
+    {
+        $remove = 'foo foo bar foo kal ter son';
+        return [
+
+            // Simple cases
+            [false, 'foo', 'bar'],
+            [true, 'foo', 'foo'],
+            [true, 'FOO', 'foo', false],
+            [false, 'FOO', 'foo', true],
+
+            // Many needles, one haystack
+            [true, ['foo', 'bar'], $remove],
+            [false, ['vlu', 'bla'], $remove],
+            [true, ['foo', 'vlu'], $remove, false, false],
+            [false, ['foo', 'vlu'], $remove, false, true],
+
+            // Many haystacks, one needle
+            [true, 'foo', ['foo', 'bar']],
+            [true, 'bar', ['foo', 'bar']],
+            [false, 'foo', ['bar', 'kal']],
+            [true, 'foo', ['foo', 'foo'], false, false],
+            [false, 'foo', ['foo', 'bar'], false, true],
+        ];
+    }
+
+    /**
+     * @dataProvider provideFind
+     */
+    public function testCanFindStringsInStrings(
+        $expect,
+        $needle,
+        $haystack,
+        $caseSensitive = false,
+        $absoluteFinding = false
+    ) {
+        $result = __::find($haystack, $needle, $caseSensitive, $absoluteFinding);
+
+        $this->assertEquals($expect, $result);
+    }
+
+    public function testIsUrl()
+    {
+        $a = 'https://google.com/';
+        $b = '//google.com';
+        $c = '/google';
+        $d = 'mail.google.com';
+        $e = 'mail.google';
+
+        $this->assertTrue(__::isUrl($a));
+        $this->assertTrue(__::isUrl($b));
+        $this->assertFalse(__::isUrl($c));
+        $this->assertTrue(__::isUrl($d));
+        $this->assertTrue(__::isUrl($e));
+    }
+
     public function testKebabCase()
     {
         // Arrange
@@ -139,6 +195,12 @@ class StringsTest extends TestCase
         $this->assertEquals('Foo Bar', $x);
         $this->assertEquals('Foo Bar', $y);
         $this->assertEquals('FOO BAR', $z);
+    }
+
+    public function testStartsWith()
+    {
+        $this->assertTrue(__::startsWith('foobar', 'foo'));
+        $this->assertFalse(__::startsWith('barfoo', 'foo'));
     }
 
     public function testToLower()

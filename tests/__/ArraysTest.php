@@ -188,6 +188,31 @@ class ArraysTest extends TestCase
         }
     }
 
+    public function testContains()
+    {
+        $a = ['value0', 'value1', 'value2', 2];
+        $b = ['k1' => 'val1', 'k2' => 'val2', 'k3' => 'val3', 'k4' => 2];
+        
+
+        $this->assertTrue(__::contains($a, 'value0'));
+        $this->assertTrue(__::contains($a, 'value1'));
+        $this->assertTrue(__::contains($a, 'value2'));
+        $this->assertTrue(__::contains($a, 2));
+        $this->assertFalse(__::contains($a, '2', true));
+        $this->assertFalse(__::contains($a, '2'));
+        $this->assertTrue(__::contains($a, '2', false));
+        $this->assertFalse(__::contains($a, 'value'));
+
+        $this->assertTrue(__::contains($b, 'val1'));
+        $this->assertTrue(__::contains($b, 'val2'));
+        $this->assertTrue(__::contains($b, 'val3'));
+        $this->assertTrue(__::contains($b, 2));
+        $this->assertFalse(__::contains($b, '2', true));
+        $this->assertFalse(__::contains($b, '2'));
+        $this->assertTrue(__::contains($b, '2', false));
+        $this->assertFalse(__::contains($b, 'value'));
+    }
+
     public function testDrop()
     {
         // Arrange
@@ -261,6 +286,62 @@ class ArraysTest extends TestCase
         }
 
         $this->assertEquals(count($expected), $itrSize);
+    }
+
+    public function testEvery() {
+        $a = ['value', 'value', 'value'];
+        $b = ['value', 'nope', 'value'];
+
+        $this->assertTrue(__::every($a, function ($value, $key) {
+            return $value == 'value' && is_numeric($key);
+        }));
+        $this->assertFalse(__::every($b, function ($value, $key) {
+            return $value == 'value' && is_numeric($key);
+        }));
+    }
+
+    public function testFindKey()
+    {
+        $testNumbers = [1, 2, 3];
+        $testStrings = [ 'one', 'two', 'three' ];
+        $testWithKeys = [
+            'one' => 1,
+            'two' => 2,
+            'three' => 3,
+        ];
+        
+        // numbers
+        $numbersFound = __::findKey($testNumbers, function ($value) {
+            return $value % 2 === 0;
+        });
+        $this->assertEquals(1, $numbersFound);
+
+        $numbersNotFound = __::findKey($testNumbers, function ($value) {
+            return $value === 5;
+        });
+        $this->assertNull($numbersNotFound);
+        
+        // strings
+        $stringsFound = __::findKey($testStrings, function ($value) {
+            return $value === 'two';
+        });
+        $this->assertEquals(1, $stringsFound);
+
+        $stringsNotFound = __::findKey($testStrings, function ($value) {
+            return $value === 'seven';
+        });
+        $this->assertNull($stringsNotFound);
+
+        // with keys
+        $foundWithKeys = __::findKey($testWithKeys, function ($value) {
+            return $value % 2 === 0;
+        });
+        $this->assertEquals('two', $foundWithKeys);
+
+        $notFoundWithKeys = __::findKey($testWithKeys, function ($value) {
+            return $value === 5;
+        });
+        $this->assertNull($notFoundWithKeys);
     }
 
     public static function dataProvider_flatten()
@@ -435,5 +516,82 @@ class ArraysTest extends TestCase
 
         // Assert
         $this->assertEquals([$string, $string, $string], $x);
+    }
+
+    public function testSome() {
+        $a = ['some', 'not', 'some'];
+        $b = ['not', 'nope', 'never'];
+
+        $this->assertTrue(__::some($a, function ($value, $key) {
+            return $value == 'some';
+        }));
+        $this->assertFalse(__::some($b, function ($value, $key) {
+            return $value == 'some';
+        }));
+    }
+
+    public static function dataProvider_sort()
+    {
+        return [
+            [
+                'sourceArray' => ['cat', 'bear', 'aardvark'],
+                'expected' => [2 => 'aardvark', 1 => 'bear', 0 => 'cat'],
+            ],
+            [
+                'sourceArray' => ['c' => 'cat', 'b' => 'bear', 'a' => 'aardvark'],
+                'expected' => ['a' => 'aardvark', 'b' => 'bear', 'c' => 'cat'],
+            ],
+        ];
+    }
+    
+    /**
+     * @dataProvider dataProvider_sort
+     *
+     * @param array|\Traversable $sourceArray
+     * @param array              $expectedChunks
+     */
+    public function testSort($sourceArray, $expected)
+    {
+        $actual = __::sort($sourceArray, function ($a, $b) {
+            return strcmp($a, $b);
+        }, true);
+
+        foreach ($actual as $i => $value) {
+            $this->assertSame($expected[$i], $value);
+        }
+    }
+
+    public function testZip() {
+        $actual = [
+            [
+                ['one', 'two', 'three'],
+                [1, 2, 3],
+                [-1, -2, -3],
+            ],
+            [
+                ['one', 'two', 'three'], 
+                [1, 2, 3], 
+                [-1, -2, -3], 
+                [true, false],
+            ],
+        ];
+
+        $expected = [
+            [
+                ['one', 1, -1], 
+                ['two', 2, -2], 
+                ['three', 3, -3]
+            ],
+            [
+                ['one', 1, -1, true], 
+                ['two', 2, -2, false], 
+                ['three', 3, -3, null],
+            ],
+        ];
+
+        foreach ($actual as $i => $value) {
+            $result = call_user_func_array(['__', 'zip'], $value);
+            $this->assertSame($expected[$i], $result);
+        }
     }
 }

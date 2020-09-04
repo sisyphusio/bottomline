@@ -5,3 +5,5 @@ composer.phar
 composer.lock
 Gemfile.lock
 vendor/
+.DS_Store
+new/
