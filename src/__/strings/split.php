@@ -30,7 +30,10 @@ namespace strings;
  *
  * @return string[]
  */
-function split($input, $delimiter, $limit = PHP_INT_MAX)
-{
-    return explode($delimiter, $input, $limit);
+function split($input, $delimiter, $limit = PHP_INT_MAX) {
+    if (is_string( $input ) && is_string( $delimiter )) {
+        return explode($delimiter, $input, $limit);
+    }
+
+    return '';
 }
