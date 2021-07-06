@@ -26,8 +26,7 @@ namespace collections;
  *
  * @return array|mixed
  */
-function first($array, $count = null)
-{
+function first($array, $count = null) {
     $i = $count ? $count : 1;
     $values = [];
     foreach ($array as $value) {
@@ -37,5 +36,14 @@ function first($array, $count = null)
             break;
         }
     }
-    return $count ? $values : $values[0];
+
+    if ($count) {
+        return $values;
+    }
+
+    else if (array_key_exists(0, $values)) {
+        return $values[0];
+    }
+
+    return array_shift($values);
 }
