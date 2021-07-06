@@ -64,14 +64,20 @@ function _universal_set($collection, $key, $value)
  *
  * @return array|object the new collection with the item set
  */
-function set($collection, $path, $value = null)
-{
-    if ($path === null) {
+function set($collection, $path, $value = null) {
+    if (is_null($collection) || is_null($path)) {
         return $collection;
     }
 
     $portions = \__::split($path, \__::DOT_NOTATION_DELIMITER, 2);
     $key = $portions[0];
+
+    /**
+     * Countable Bug
+     */
+    if (!\is_countable($portions)) {
+        return $collection;
+    }
 
     if (\count($portions) === 1) {
         return _universal_set($collection, $key, $value);

@@ -30,8 +30,7 @@ namespace collections;
  *
  * @return array|mixed|null
  */
-function get($collection, $path, $default = null)
-{
+function get($collection, $path, $default = null) {
     // TODO Make the algorithm recursive.
     // TODO Factorize between object and array access (use a $getter function,
     // as the $setter in __::set()).
