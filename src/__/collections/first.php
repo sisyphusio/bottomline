@@ -37,13 +37,5 @@ function first($array, $count = null) {
         }
     }
 
-    if ($count) {
-        return $values;
-    }
-
-    else if (array_key_exists(0, $values)) {
-        return $values[0];
-    }
-
-    return array_shift($values);
+    return $count ? $values : $values[0];
 }

@@ -38,16 +38,6 @@ namespace collections;
  */
 function has($collection, $path) {
     $portions = \__::split($path, \__::DOT_NOTATION_DELIMITER, 2);
-
-    if (
-        !\is_countable($portions) || 
-        is_null($portions) || 
-        is_null($collection) || 
-        is_null($path)
-    ) {
-        return false;
-    }
-
     $key = $portions[0];
 
     if (\count($portions) === 1) {
