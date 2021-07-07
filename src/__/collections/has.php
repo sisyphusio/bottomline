@@ -40,6 +40,16 @@ function has($collection, $path) {
     $portions = \__::split($path, \__::DOT_NOTATION_DELIMITER, 2);
     $key = $portions[0];
 
+    // if (!\is_countable($portions)) {
+    //     \Kint\Kint::dump([
+    //         'collection' => $collection,
+    //         'path' => $path,
+    //         'value' => $value,
+    //         'portions' => $portions,
+    //         'key' => $key,
+    //     ]);
+    // }
+
     if (\count($portions) === 1) {
         // Calling array_key_exists on an ArrayAccess object will not call `offsetExists()`
         // See: http://php.net/manual/en/class.arrayaccess.php#104061

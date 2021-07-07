@@ -37,5 +37,12 @@ function first($array, $count = null) {
         }
     }
 
+    /**
+     * Bugfix: PHP Warning:  Undefined array key 0 in /Users/hunterbrose/sites/fibreworks/fibreworks/vendor/maciejczyzewski/bottomline/src/__/collections/first.php on line 40
+     */
+    if (!array_key_exists(0, $values)) {
+        return null;
+    }
+
     return $count ? $values : $values[0];
 }

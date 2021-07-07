@@ -37,8 +37,24 @@ function get($collection, $path, $default = null) {
     if (\is_array($collection) && isset($collection[$path])) {
         return $collection[$path];
     }
+    
+    /**
+     * Bugfix: PHP Warning:  foreach() argument must be of type array|object, string given in /Users/hunterbrose/sites/fibreworks/fibreworks/vendor/maciejczyzewski/bottomline/src/__/collections/get.php on line 41
+     */
+    $splitPath = \__::split($path, \__::DOT_NOTATION_DELIMITER);
+    // if (!\is_countable($splitPath)) {
+    //     \Kint\Kint::dump([
+    //         'collection' => $collection,
+    //         'path' => $path,
+    //         'default' => $default,
+    //         'splitPath' => $splitPath,
+    //     ]);
 
-    foreach (\__::split($path, \__::DOT_NOTATION_DELIMITER) as $segment) {
+    //     throw new \Exception('Stoppppp!');
+    // }
+
+
+    foreach ($splitPath as $segment) {
         if (\is_object($collection) && !($collection instanceof \ArrayAccess)) {
             if (isset($collection->{$segment})) {
                 $collection = $collection->{$segment};

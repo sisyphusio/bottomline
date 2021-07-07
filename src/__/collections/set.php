@@ -65,12 +65,30 @@ function _universal_set($collection, $key, $value)
  * @return array|object the new collection with the item set
  */
 function set($collection, $path, $value = null) {
+    $path = is_numeric($path) ? strval($path) : $path;
+
     if ($path === null) {
         return $collection;
     }
 
     $portions = \__::split($path, \__::DOT_NOTATION_DELIMITER, 2);
     $key = $portions[0];
+
+    /**
+     * Bugfix Code
+     */
+    // if (!\is_countable($portions)) {
+    //     \Kint\Kint::dump([
+    //         'collection' => $collection,
+    //         'path' => $path,
+    //         'value' => $value,
+    //         'portions' => $portions,
+    //         'key' => $key,
+    //     ]);
+
+    //     throw new Exception('Stoppppp!');
+    // }
+
 
     if (\count($portions) === 1) {
         return _universal_set($collection, $key, $value);
