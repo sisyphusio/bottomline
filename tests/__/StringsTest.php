@@ -93,6 +93,23 @@ class StringsTest extends TestCase
         $this->assertTrue(__::isUrl($e));
     }
 
+    public function testJoin()
+    {
+        // Arrange
+        $a = ['github', 'com'];
+        $b = ['a', 'b', 'c'];
+
+        // Act
+        $x = __::join($a, '.');
+        $y = __::join($b, '-');
+        $z = __::join($b, '-hello-');
+
+        // Assert
+        $this->assertEquals('github.com', $x);
+        $this->assertEquals('a-b-c', $y);
+        $this->assertEquals('a-hello-b-hello-c', $z);
+    }
+
     public function testKebabCase()
     {
         // Arrange
